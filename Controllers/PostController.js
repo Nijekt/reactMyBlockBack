@@ -93,7 +93,9 @@ export const getOnePost = async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate("user");
+    const posts = await PostModel.find()
+      .sort({ createdAt: -1 })
+      .populate("user");
 
     res.json(posts);
   } catch (error) {
@@ -103,12 +105,14 @@ export const getAllPosts = async (req, res) => {
 
 export const getLastTags = async (req, res) => {
   try {
-    const posts = await PostModel.find().sort({ createdAt: -1 }).limit(5);
+    const posts = await PostModel.find().sort({ createdAt: -1 }).limit(7);
 
     const tags = posts
-      .map((obj) => obj.tags)
+      .map((obj) => obj.tags || [])
       .flat()
+      .filter((tag) => tag)
       .slice(0, 5);
+    // .filter((tag) => tag && tag.trim());
     res.json(tags);
   } catch (error) {
     console.log(error);

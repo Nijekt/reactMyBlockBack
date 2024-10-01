@@ -6,7 +6,11 @@ import {
   registerValidation,
 } from "./validations.js";
 import { validationResult } from "express-validator";
-import { PostController, UserController } from "./Controllers/index.js";
+import {
+  CommentController,
+  PostController,
+  UserController,
+} from "./Controllers/index.js";
 import checkAuth from "./utils/checkAuth..js";
 // import { register } from "./Controllers/UserController.js";
 import cors from "cors";
@@ -72,6 +76,12 @@ app.patch("/posts/:id", checkAuth, PostController.updatePost);
 app.delete("/posts/:id", checkAuth, PostController.removePost);
 
 app.get("/tags", PostController.getLastTags);
+
+app.get("/comments/getAll", CommentController.getAllComs);
+
+app.post("/comments/:id", checkAuth, CommentController.createComment);
+
+app.get("/comments/:id", checkAuth, CommentController.getComsByPost);
 
 app.listen(4444, (err) => {
   if (err) {
