@@ -54,6 +54,10 @@ app.post("/auth/login", loginValidation, UserController.login);
 
 app.get("/auth/getAuth", checkAuth, UserController.getAuth);
 
+app.get("/auth/getUser/:id", UserController.getUserById);
+
+app.patch("/user/:id/avatar", checkAuth, UserController.updateUserPhoto);
+
 app.post("/upload", upload.single("image"), (req, res) => {
   res.json({
     url: `/uploads/${req.file.originalname}`,
@@ -79,9 +83,11 @@ app.get("/tags", PostController.getLastTags);
 
 app.get("/comments/getAll", CommentController.getAllComs);
 
+app.get("/comments/last", CommentController.getLastComments);
+
 app.post("/comments/:id", checkAuth, CommentController.createComment);
 
-app.get("/comments/:id", checkAuth, CommentController.getComsByPost);
+app.get("/comments/:id", CommentController.getComsByPost);
 
 app.listen(4444, (err) => {
   if (err) {

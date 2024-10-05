@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import UserModel from "../Models/UserModel.js";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
+import PostModel from "../Models/PostModel.js";
 
 export const register = async (req, res) => {
   try {
@@ -42,9 +43,9 @@ export const register = async (req, res) => {
       ...userData,
       token,
     });
-  } catch (err) {
-    console.log(err);
-    res.status(409).json({
+  } catch (error) {
+    console.log(error);
+    res.json({
       message: "Can not create account",
     });
   }
@@ -102,5 +103,42 @@ export const getAuth = async (req, res) => {
     res.status(404).json({
       message: "User in not found",
     });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await UserModel.findById(userId);
+    const posts = await PostModel.find({ user: userId }).sort({
+      createdAt: -1,
+    });
+
+    const { passwordHash, ...userData } = user._doc;
+
+    res.json({ userData, posts });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateUserPhoto = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, {
+      avatarUrl: req.body.avatarUrl,
+    });
+
+    if (!updatedUser) {
+      return res.json({
+        message: "User is not found",
+      });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.log(error);
   }
 };

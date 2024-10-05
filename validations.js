@@ -13,13 +13,13 @@ export const loginValidation = [
 
 export const createPostValidation = [
   body("title", "Min length 3").isLength({ min: 3 }).isString(),
-  body("text", "Min length 5").isLength({ min: 5 }).isString(),
+  body("text", "Min length 5").isLength({ min: 3 }).isString(),
   body("tags", "Incorrect format").optional().isArray(),
   body("imageUrl", "Incorrect Link").optional().isString(),
 ];
 export const updatePostValidation = [
   body("title", "Min length 3").isLength({ min: 3 }).isString(),
-  body("text", "Min length 5").isLength({ min: 5 }).isString(),
+  body("text", "Min length 5").isLength({ min: 3 }).isString(),
   body("tags", "Incorrect format").optional(),
   body("imageUrl", "Incorrect Link").optional().isString(),
 ];

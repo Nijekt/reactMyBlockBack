@@ -1,3 +1,4 @@
+import CommentModel from "../Models/CommentModel.js";
 import PostModel from "../Models/PostModel.js";
 
 export const createPost = async (req, res) => {
@@ -25,6 +26,7 @@ export const removePost = async (req, res) => {
   try {
     const id = req.params.id;
     const post = await PostModel.findByIdAndDelete(id);
+    await CommentModel.findOneAndDelete({ post: id });
 
     if (!post) {
       res.status(404).json({
