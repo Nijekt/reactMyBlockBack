@@ -56,7 +56,7 @@ export const login = async (req, res) => {
     const user = await UserModel.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(400).json({
+      return res.json({
         message: "User is not found",
       });
     }
@@ -67,7 +67,7 @@ export const login = async (req, res) => {
     );
 
     if (!isValidPassword) {
-      return res.status(500).json({
+      return res.json({
         message: "User or password is incorrect",
       });
     }
@@ -82,7 +82,7 @@ export const login = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(400).json({
+    res.json({
       message: "Can not login to acc",
     });
   }
@@ -111,9 +111,11 @@ export const getUserById = async (req, res) => {
     const userId = req.params.id;
 
     const user = await UserModel.findById(userId);
-    const posts = await PostModel.find({ user: userId }).sort({
-      createdAt: -1,
-    });
+    const posts = await PostModel.find({ user: userId })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("user");
 
     const { passwordHash, ...userData } = user._doc;
 

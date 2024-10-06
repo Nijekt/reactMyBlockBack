@@ -50,7 +50,12 @@ app.post(
   UserController.register
 );
 
-app.post("/auth/login", loginValidation, UserController.login);
+app.post(
+  "/auth/login",
+  loginValidation,
+  handleValidationsErrors,
+  UserController.login
+);
 
 app.get("/auth/getAuth", checkAuth, UserController.getAuth);
 
@@ -72,6 +77,8 @@ app.post(
   PostController.createPost
 );
 app.get("/posts/getAll", PostController.getAllPosts);
+
+app.get("/posts/getAllByViews", PostController.getAllPostsByViews);
 
 app.get("/posts/:id", PostController.getOnePost);
 

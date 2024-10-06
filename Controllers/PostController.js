@@ -95,8 +95,35 @@ export const getOnePost = async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await PostModel.find()
+    const tag = req.query.tag;
+
+    let query = {};
+
+    if (tag) {
+      query.tags = tag;
+    }
+
+    const posts = await PostModel.find(query)
       .sort({ createdAt: -1 })
+      .populate("user");
+
+    res.json(posts);
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getAllPostsByViews = async (req, res) => {
+  try {
+    const tag = req.query.tag;
+
+    let query = {};
+
+    if (tag) {
+      query.tags = tag;
+    }
+
+    const posts = await PostModel.find(query)
+      .sort({ viewsCount: -1 })
       .populate("user");
 
     res.json(posts);
